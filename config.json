@@ -1,5 +1,5 @@
 {
-  "name": "Convert Supervisely into YOLO v5 format",
+  "name": "Convert Supervisely into YOLO v5 format_from Alex",
   "type": "app",
   "categories": [
     "yolov5",
@@ -7,7 +7,7 @@
   ],
   "description": "Transform project to YOLO v5 format and prepares download tar archive",
   "docker_image": "supervisely/convert-supervisely-to-yolov5",
-  "main_script": "supervisely_apps/convert-supervisely-to-yolov5-format/src/convert_sly_to_yolov5.py",
+  "main_script": "convert-supervisely-to-yolov5-format/src/convert_sly_to_yolov5.py",
   "modal_template": "src/modal.html",
   "modal_template_state": {},
   "gui_template": "src/gui.html",
