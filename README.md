@@ -21,7 +21,43 @@
 
 ## Overview
 
-Transform project to YOLO v5 format and prepares download tar archive
+Transform project to YOLO v5 format and prepares download tar archive.
+
+**YOLO v5 format** contain:
+
+Configuration file(config_file_name.yaml) that defines:
+1) an optional download command/URL for auto-downloading, 
+2) a path to a directory of training images,
+3) the same for our validation images, 
+4) the number of classes, 
+5) a list of class names
+
+Example: 
+train: /alex_data/sl/images/train/
+val: /alex_data/sl/images/val/
+nc: 2
+names: ['lemon', 'kiwi']
+
+Structure of train and val images and labels according to the example below:
+<img src="https://user-images.githubusercontent.com/26833433/83666389-bab4d980-a581-11ea-898b-b25471d37b83.jpg"/>
+
+YOLOv5 locates label for each image
+Example: 
+coco/images/train2017/000000109622.jpg  # image
+coco/labels/train2017/000000109622.txt  # label
+
+
+Structure of label file:
+1) One row per object
+2) Each row is class x_center y_center width height format.
+3) Box coordinates must be in normalized xywh format (from 0 - 1).
+4) Class numbers are zero-indexed (start from 0).
+
+<img src="https://user-images.githubusercontent.com/26833433/91506361-c7965000-e886-11ea-8291-c72b98c25eec.jpg"/>
+
+The label file corresponding to the above image contains 2 persons (class 0) and a tie (class 27):
+<img src="https://user-images.githubusercontent.com/26833433/98809572-0bc4d580-241e-11eb-844e-eee756f878c2.png"/>
+
 
 ## Preparation
 
