@@ -31,7 +31,7 @@ Configuration file(config_file_name.yaml) that defines:
 3) the number of classes, 
 4) a list of class names
 
-Example: 
+Example:
 train: /alex_data/sl/images/train/
 val: /alex_data/sl/images/val/
 nc: 2
@@ -41,9 +41,10 @@ Structure of train and val images and labels according to the example below:
 <img src="https://user-images.githubusercontent.com/26833433/83666389-bab4d980-a581-11ea-898b-b25471d37b83.jpg"/>
 
 YOLOv5 locates label for each image
+
 Example:
-coco/images/train2017/000000109622.jpg  # image
-coco/labels/train2017/000000109622.txt  # label
+coco/images/train2017/000000109622.jpg  # image,
+coco/labels/train2017/000000109622.txt  # label.
 
 
 Structure of label file:
