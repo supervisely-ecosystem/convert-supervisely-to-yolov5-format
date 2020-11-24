@@ -26,11 +26,10 @@ Transform project to YOLO v5 format and prepares download tar archive.
 **YOLO v5 format** contain:
 
 Configuration file(config_file_name.yaml) that defines:
-1) an optional download command/URL for auto-downloading, 
-2) a path to a directory of training images,
-3) the same for our validation images, 
-4) the number of classes, 
-5) a list of class names
+1) a path to a directory of training images,
+2) the same for our validation images, 
+3) the number of classes, 
+4) a list of class names
 
 Example: 
 train: /alex_data/sl/images/train/
@@ -42,7 +41,7 @@ Structure of train and val images and labels according to the example below:
 <img src="https://user-images.githubusercontent.com/26833433/83666389-bab4d980-a581-11ea-898b-b25471d37b83.jpg"/>
 
 YOLOv5 locates label for each image
-Example: 
+Example:
 coco/images/train2017/000000109622.jpg  # image
 coco/labels/train2017/000000109622.txt  # label
 
@@ -79,9 +78,11 @@ Download or create project in supervisely format you want to convert.
 
 3. In popup menu choise "Convert Supervisely into YOLO v5 format".
 
-<img src="https://i.imgur.com/EtnGkaU.png"/>
+<img src="https://i.imgur.com/ZTYhihF.png"/>
 
 4. Open "files" menu. Here in directory "yolov5_format" you can find tar archive with project in YOLOv5 format.
 
-<img src="https://i.imgur.com/ScrrdNp.png"/>
+<img src="https://i.imgur.com/21BCUTN.png"/>
+
+
 
