@@ -25,11 +25,17 @@ Transform project to YOLO v5 format and prepares download tar archive.
 
 **YOLO v5 format** contain:
 
-Configuration file(config_file_name.yaml) that defines:
+Configuration file(config.yaml) that defines:
+
 1) a path to a directory of training images,
+
 2) the same for our validation images, 
+
 3) the number of classes, 
+
 4) a list of class names
+
+
 
 Example:
 
@@ -41,7 +47,9 @@ nc: 2
 
 names: ['lemon', 'kiwi']
 
-Structure of train and val images and labels according to the example below:
+
+
+**Structure of train and val images and labels** according to the example below:
 <img src="https://user-images.githubusercontent.com/26833433/83666389-bab4d980-a581-11ea-898b-b25471d37b83.jpg"/>
 
 YOLOv5 locates label for each image
@@ -53,10 +61,15 @@ coco/images/train2017/000000109622.jpg  # image,
 coco/labels/train2017/000000109622.txt  # label.
 
 
-Structure of label file:
+
+**Structure of label file**:
+
 1) One row per object
+
 2) Each row is class x_center y_center width height format.
+
 3) Box coordinates must be in normalized xywh format (from 0 - 1).
+
 4) Class numbers are zero-indexed (start from 0).
 
 <img src="https://user-images.githubusercontent.com/26833433/91506361-c7965000-e886-11ea-8291-c72b98c25eec.jpg"/>
