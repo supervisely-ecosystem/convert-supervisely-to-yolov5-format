@@ -32,9 +32,13 @@ Configuration file(config_file_name.yaml) that defines:
 4) a list of class names
 
 Example:
+
 train: /alex_data/sl/images/train/
+
 val: /alex_data/sl/images/val/
+
 nc: 2
+
 names: ['lemon', 'kiwi']
 
 Structure of train and val images and labels according to the example below:
@@ -43,7 +47,9 @@ Structure of train and val images and labels according to the example below:
 YOLOv5 locates label for each image
 
 Example:
+
 coco/images/train2017/000000109622.jpg  # image,
+
 coco/labels/train2017/000000109622.txt  # label.
 
 
@@ -83,7 +89,7 @@ Download or create project in supervisely format you want to convert.
 
 4. Open "files" menu. Here in directory "yolov5_format" you can find tar archive with project in YOLOv5 format.
 
-<img src="https://i.imgur.com/21BCUTN.png"/>
+<img src="https://i.imgur.com/pu9snon.png"/>
 
 
 
