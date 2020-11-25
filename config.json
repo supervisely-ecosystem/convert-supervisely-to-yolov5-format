@@ -1,5 +1,5 @@
 {
-  "name": "Convert Supervisely into YOLO v5 format",
+  "name": "Convert Supervisely to YOLO v5 format",
   "type": "app",
   "categories": [
     "yolov5",
