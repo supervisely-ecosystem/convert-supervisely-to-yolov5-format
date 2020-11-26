@@ -21,20 +21,12 @@
 
 ## Overview
 
-Transform project to YOLO v5 format and prepares download tar archive.
-
-**YOLO v5 [format](https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data)** you can find here.
-
-**Supervisely [format](https://docs.supervise.ly/data-organization/00_ann_format_navi)** you can find here.
-
-
+Transform images project in Supervisely ([link to format](https://docs.supervise.ly/data-organization/00_ann_format_navi)) to [YOLO v5 format](https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data) and prepares downloadable tar archive.
 
 
 ## Preparation
 
-Project wil label images have to contain only bounding boxes
-
-Download or create project in supervisely format you want to convert.
+Supervisely project have to contain only classes with shape `Rectangle`. It means that all labeled objects have to be bouning boxes. If you project has classes with other shapes and you would like to convert the shapes of these classes and all corresponding objects (e.g. bitmaps or polygons to rectangles), we recommend you to use [`Convert Class Shape`](https://ecosystem.supervise.ly/apps/convert-class-shape) app. 
 
 ## How To Run 
 **Step 1**: Add app to your team from Ecosystem if it is not there.
