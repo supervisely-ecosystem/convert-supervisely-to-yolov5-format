@@ -31,7 +31,7 @@ Supervisely project have to contain only classes with shape `Rectangle`. It mean
 ## How To Run 
 **Step 1**: Add app to your team from Ecosystem if it is not there.
 
-**Step 2**: Go to `Plugins & Apps` section in current team. And press `Run` button in front of application.
+**Step 2**: Open context menu of project -> `Download as` -> `Convert Supervisely to YOLO v5 format` 
 
 
 ## How to use
