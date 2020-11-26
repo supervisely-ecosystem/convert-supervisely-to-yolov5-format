@@ -28,6 +28,8 @@ Transform images project in Supervisely ([link to format](https://docs.supervise
 
 Supervisely project have to contain only classes with shape `Rectangle`. It means that all labeled objects have to be bouning boxes. If you project has classes with other shapes and you would like to convert the shapes of these classes and all corresponding objects (e.g. bitmaps or polygons to rectangles), we recommend you to use [`Convert Class Shape`](https://ecosystem.supervise.ly/apps/convert-class-shape) app. 
 
+TODO: train/val tags
+
 ## How To Run 
 **Step 1**: Add app to your team from Ecosystem if it is not there.
 
