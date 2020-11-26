@@ -33,8 +33,6 @@ Supervisely project have to contain only classes with shape `Rectangle`. It mean
 
 **Step 2**: Go to `Plugins & Apps` section in current team. And press `Run` button in front of application.
 
-**Note**: Running procedure is simialr for almost all apps that are started from context menu. Example steps with screenshots are [here in how-to-run section](https://github.com/supervisely-ecosystem/merge-classes#how-to-run). 
-
 
 ## How to use
 
