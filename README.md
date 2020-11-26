@@ -33,7 +33,7 @@ Supervisely project have to contain only classes with shape `Rectangle`. It mean
 
 **Step 2**: Open context menu of project -> `Download as` -> `Convert Supervisely to YOLO v5 format` 
 
-![](https://i.imgur.com/bOUC5WH.png)
+<img src="https://i.imgur.com/bOUC5WH.png" width="600px"/>
 
 
 ## How to use
