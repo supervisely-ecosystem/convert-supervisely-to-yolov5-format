@@ -32,6 +32,8 @@ Transform project to YOLO v5 format and prepares download tar archive.
 
 ## Preparation
 
+Project wil label images have to contain only bounding boxes
+
 Download or create project in supervisely format you want to convert.
 
 ## How To Run 
