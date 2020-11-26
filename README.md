@@ -1,5 +1,5 @@
 <div align="center" markdown>
-<img src="https://i.imgur.com/PGaQw00.png"/>
+<img src="https://i.imgur.com/UeObs7R.png"/>
 
 # From supervisely to Yolo5 format
 
