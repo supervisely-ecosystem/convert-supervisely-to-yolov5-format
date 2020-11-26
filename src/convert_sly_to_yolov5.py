@@ -31,7 +31,7 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
 
     RESULT_DIR = os.path.join(my_app.data_dir, result_dir_name)
     sly.fs.mkdir(RESULT_DIR)
-    ARCHIVE_NAME = result_dir_name + ".tar.gz"
+    ARCHIVE_NAME = result_dir_name + ".tar"
     RESULT_ARCHIVE = os.path.join(my_app.data_dir, ARCHIVE_NAME)
     CONFIG_PATH = os.path.join(RESULT_DIR, 'data_config.yaml')
 
