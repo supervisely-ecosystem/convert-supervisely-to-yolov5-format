@@ -52,20 +52,3 @@ Resulting archived is saved in : `Current Team` -> `Files` -> `/yolov5_format/<t
 If some images were not tagged with `train` or `val` tags, special warning is printed. You will see all warnings in task logs.
 
 <img src="https://i.imgur.com/O5tshZQ.png"/>
-
-
-
-
-
-2. Click three point on project and choise "Download as" option.
-
-3. In popup menu choise "Convert Supervisely into YOLO v5 format".
-
-<img src="https://i.imgur.com/ZTYhihF.png"/>
-
-4. Open "files" menu. Here in directory "yolov5_format" you can find tar archive with project in YOLOv5 format.
-
-<img src="https://i.imgur.com/pu9snon.png"/>
-
-
-
