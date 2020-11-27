@@ -147,7 +147,7 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
     remote_archive_path = "/yolov5_format/{}/{}".format(task_id, ARCHIVE_NAME)
 
     #@TODO: uncomment only for debug
-    api.file.remove(TEAM_ID, remote_archive_path)
+    #api.file.remove(TEAM_ID, remote_archive_path)
 
     upload_progress = []
     def _print_progress(monitor, upload_progress):
@@ -178,14 +178,9 @@ def main():
     # Run application service
     my_app.run(initial_events=[{"command": "transform"}])
 
-#@TODO: check debug comments
 #@TODO: add information to modal window
-#@TODO: yolo_v5 collection
-#@TODO: output task archive with direct download link
-#@TODO: test report output in workspace tasks
-#@TODO: check that version is already exists = dockerimage tag
 if __name__ == "__main__":
     #@TODO: uncomment only for debug
-    sly.fs.clean_dir(my_app.data_dir)
+    #sly.fs.clean_dir(my_app.data_dir)
 
     sly.main_wrapper("main", main)
