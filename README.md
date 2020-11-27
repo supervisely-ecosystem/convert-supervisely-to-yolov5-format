@@ -31,8 +31,6 @@ Supervisely project have to contain only classes with shape `Rectangle`. It mean
 In addition, YOLO v5 format implies the presence of train/val datasets. Thus, to split images on training and validation datasets you should assign  corresponding tags (`train` or `val`) to images. If image doesn't have such tags, it will be treated as `train`. We recommend to use app [`Assign train/val tags to images`](https://ecosystem.supervise.ly/apps/tag-train-val-test). 
 
 
-TODO: train/val tags
-
 ## How To Run 
 **Step 1**: Add app to your team from Ecosystem if it is not there.
 
