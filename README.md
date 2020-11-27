@@ -41,7 +41,21 @@ In addition, YOLO v5 format implies the presence of train/val datasets. Thus, to
 
 ## How to use
 
-1. Check project you want to convert to yolo5 format.
+App creates task in `workspace tasks` list. Once app is finished, you will see link to resulting tar archive. 
+
+<img src="https://i.imgur.com/kXnmshv.png"/>
+
+Resulting archived is saved in : `Current Team` -> `Files` -> `/yolov5_format/<task_id>/<project_id>_<project_name>.tar`. For example, in our example file path is the following: `/yolov5_format/1430/1047_lemons_annotated.tar`.
+
+<img src="https://i.imgur.com/hGrAyY0.png"/>
+
+If some images were not tagged with `train` or `val` tags, special warning is printed. You will see all warnings in task logs.
+
+<img src="https://i.imgur.com/O5tshZQ.png"/>
+
+
+
+
 
 2. Click three point on project and choise "Download as" option.
 
