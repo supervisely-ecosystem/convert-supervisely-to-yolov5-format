@@ -1,7 +1,7 @@
 <div align="center" markdown>
-<img src="https://i.imgur.com/QO4GtA1.png"/>
+<img src="https://i.imgur.com/UeObs7R.png"/>
 
-# From supervisely to Yolo5 format
+# From Supervisely to YOLOv5 format
 
 
 <p align="center">
@@ -21,40 +21,34 @@
 
 ## Overview
 
-Transform project to YOLO v5 format and prepares download tar archive.
-
-**YOLO v5 [format](https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data)** you can find here.
-
-**Supervisely [format](https://docs.supervise.ly/data-organization/00_ann_format_navi)** you can find here.
-
-
+Transform images project in Supervisely ([link to format](https://docs.supervise.ly/data-organization/00_ann_format_navi)) to [YOLO v5 format](https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data) and prepares downloadable `tar` archive.
 
 
 ## Preparation
 
-Download or create project in supervisely format you want to convert.
+Supervisely project have to contain only classes with shape `Rectangle`. It means that all labeled objects have to be bouning boxes. If you project has classes with other shapes and you would like to convert the shapes of these classes and all corresponding objects (e.g. bitmaps or polygons to rectangles), we recommend you to use [`Convert Class Shape`](https://ecosystem.supervise.ly/apps/convert-class-shape) app. 
+
+In addition, YOLO v5 format implies the presence of train/val datasets. Thus, to split images on training and validation datasets you should assign  corresponding tags (`train` or `val`) to images. If image doesn't have such tags, it will be treated as `train`. We recommend to use app [`Assign train/val tags to images`](https://ecosystem.supervise.ly/apps/tag-train-val-test). 
+
 
 ## How To Run 
 **Step 1**: Add app to your team from Ecosystem if it is not there.
 
-**Step 2**: Go to `Plugins & Apps` section in current team. And press `Run` button in front of application.
+**Step 2**: Open context menu of project -> `Download as` -> `Convert Supervisely to YOLO v5 format` 
 
-**Note**: Running procedure is simialr for almost all apps that are started from context menu. Example steps with screenshots are [here in how-to-run section](https://github.com/supervisely-ecosystem/merge-classes#how-to-run). 
+<img src="https://i.imgur.com/bOUC5WH.png" width="600px"/>
 
 
 ## How to use
 
-1. Check project you want to convert to yolo5 format.
+App creates task in `workspace tasks` list. Once app is finished, you will see link to resulting tar archive. 
 
-2. Click three point on project and choise "Download as" option.
+<img src="https://i.imgur.com/kXnmshv.png"/>
 
-3. In popup menu choise "Convert Supervisely into YOLO v5 format".
+Resulting archived is saved in : `Current Team` -> `Files` -> `/yolov5_format/<task_id>/<project_id>_<project_name>.tar`. For example, in our example file path is the following: `/yolov5_format/1430/1047_lemons_annotated.tar`.
 
-<img src="https://i.imgur.com/ZTYhihF.png"/>
+<img src="https://i.imgur.com/hGrAyY0.png"/>
 
-4. Open "files" menu. Here in directory "yolov5_format" you can find tar archive with project in YOLOv5 format.
+If some images were not tagged with `train` or `val` tags, special warning is printed. You will see all warnings in task logs.
 
-<img src="https://i.imgur.com/pu9snon.png"/>
-
-
-
+<img src="https://i.imgur.com/O5tshZQ.png"/>
