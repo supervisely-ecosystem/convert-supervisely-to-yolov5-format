@@ -1,7 +1,7 @@
 <div align="center" markdown>
 <img src="https://i.imgur.com/UeObs7R.png"/>
 
-# From supervisely to Yolo5 format
+# From Supervisely to YOLOv5 format
 
 
 <p align="center">
