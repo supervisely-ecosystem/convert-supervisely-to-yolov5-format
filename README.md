@@ -32,7 +32,7 @@ In addition, YOLO v5 format implies the presence of train/val datasets. Thus, to
 
 
 ## How To Run 
-**Step 1**: Add app to your team from Ecosystem if it is not there.
+**Step 1**: Add app to your team from [Ecosystem](https://ecosystem.supervise.ly/apps/convert-supervisely-to-yolov5-format) if it is not there.
 
 **Step 2**: Open context menu of project -> `Download as` -> `Convert Supervisely to YOLO v5 format` 
 
