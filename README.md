@@ -41,7 +41,7 @@ In addition, YOLO v5 format implies the presence of train/val datasets. Thus, to
 
 ## How to use
 
-App creates task in `workspace tasks` list. Once app is finished, you will see link to resulting tar archive. 
+App creates task in `workspace tasks` list. Once app is finished, you will see download link to resulting tar archive. 
 
 <img src="https://i.imgur.com/kXnmshv.png"/>
 
