@@ -45,7 +45,13 @@ App creates task in `workspace tasks` list. Once app is finished, you will see l
 
 <img src="https://i.imgur.com/kXnmshv.png"/>
 
-Resulting archived is saved in : `Current Team` -> `Files` -> `/yolov5_format/<task_id>/<project_id>_<project_name>.tar`. For example, in our example file path is the following: `/yolov5_format/1430/1047_lemons_annotated.tar`.
+Resulting archived is saved in : 
+
+`Current Team` -> `Files` -> `/yolov5_format/<task_id>/<project_id>_<project_name>.tar`. 
+
+For example, in our example file path is the following: 
+
+`/yolov5_format/1430/1047_lemons_annotated.tar`.
 
 <img src="https://i.imgur.com/hGrAyY0.png"/>
 
