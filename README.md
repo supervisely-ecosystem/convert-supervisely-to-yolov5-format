@@ -58,3 +58,15 @@ For example, in our example file path is the following:
 If some images were not tagged with `train` or `val` tags, special warning is printed. You will see all warnings in task logs.
 
 <img src="https://i.imgur.com/O5tshZQ.png"/>
+
+
+Here is the example of `data_config.yaml` that you will find in archive:
+
+
+```yaml
+names: [kiwi, lemon]            # class names
+colors: [[255,1,1], [1,255,1]]  # class colors
+nc: 2                           # number of classes
+train: ../lemons/images/train   # path to train imgs
+val: ../lemons/images/val       # path to val imgs
+```
