@@ -12,6 +12,7 @@ PROJECT_ID = int(os.environ['modal.state.slyProjectId'])
 TRAIN_TAG_NAME = 'train'
 VAL_TAG_NAME = 'val'
 
+
 def transform_label(class_names, img_size, label: sly.Label):
     class_number = class_names.index(label.obj_class.name)
     rect_geometry = label.geometry.to_bbox()
@@ -22,6 +23,7 @@ def transform_label(class_names, img_size, label: sly.Label):
     height = round(rect_geometry.height / img_size[0], 6)
     result = '{} {} {} {} {}'.format(class_number, x_center, y_center, width, height)
     return result
+
 
 @my_app.callback("transform")
 @sly.timeit
@@ -48,6 +50,7 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
     meta_json = api.project.get_meta(PROJECT_ID)
     meta = sly.ProjectMeta.from_json(meta_json)
     class_names = [obj_class.name for obj_class in meta.obj_classes]
+    class_colors = [obj_class.color for obj_class in meta.obj_classes]
 
     if meta.get_tag_meta(TRAIN_TAG_NAME) is None:
         app_logger.warn('Tag {!r} not found in project meta. Images without special tags will be marked as train'
@@ -133,7 +136,8 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
         "train": "../{}/images/train".format(result_dir_name),
         "val": "../{}/images/val".format(result_dir_name),
         "nc": len(class_names),
-        "names": class_names
+        "names": class_names,
+        "colors": class_colors
     }
     with open(CONFIG_PATH, 'w') as f:
         data = yaml.dump(data_yaml, f, default_flow_style=None)
@@ -177,6 +181,7 @@ def main():
 
     # Run application service
     my_app.run(initial_events=[{"command": "transform"}])
+
 
 #@TODO: add information to modal window
 if __name__ == "__main__":
