@@ -26,7 +26,7 @@ Transform images project in Supervisely ([link to format](https://docs.supervise
 
 ## Preparation
 
-Supervisely project have to contain only classes with shape `Rectangle`. It means that all labeled objects have to be bounding boxes. If you project has classes with other shapes and you would like to convert the shapes of these classes and all corresponding objects (e.g. bitmaps or polygons to rectangles), we recommend you to use [`Convert Class Shape`](https://ecosystem.supervise.ly/apps/convert-class-shape) app. 
+Supervisely project have to contain only classes with shape `Rectangle`. It means that all labeled objects have to be bounding boxes. If your project has classes with other shapes and you would like to convert the shapes of these classes and all corresponding objects (e.g. bitmaps or polygons to rectangles), we recommend you to use [`Convert Class Shape`](https://ecosystem.supervise.ly/apps/convert-class-shape) app. 
 
 In addition, YOLO v5 format implies the presence of train/val datasets. Thus, to split images on training and validation datasets you should assign  corresponding tags (`train` or `val`) to images. If image doesn't have such tags, it will be treated as `train`. We recommend to use app [`Assign train/val tags to images`](https://ecosystem.supervise.ly/apps/tag-train-val-test). 
 
