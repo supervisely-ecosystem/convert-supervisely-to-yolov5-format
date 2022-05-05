@@ -17,7 +17,10 @@
   "icon": "https://i.imgur.com/pz3eSzx.png",
   "icon_background": "#FFFFFF",
   "context_menu": {
-    "target": ["images_project"],
+    "target": [
+      "images_project"
+    ],
     "context_root": "Download as"
-  }
+  },
+  "poster": "https://i.imgur.com/UeObs7R.png"
 }
