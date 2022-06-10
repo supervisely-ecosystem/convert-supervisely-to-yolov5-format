@@ -168,7 +168,7 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
     api.task.set_output_archive(task_id, file_info.id, ARCHIVE_NAME, file_url=file_info.storage_path)
 
     my_app.stop()
-#
+
 
 def main():
     sly.logger.info("Script arguments", extra={
