@@ -1,8 +1,20 @@
 import os
+import sys
 import yaml
 
 import supervisely as sly
 from supervisely.app.v1.app_service import AppService
+
+app_root_directory = os.path.dirname(os.getcwd())
+sys.path.append(app_root_directory)
+sys.path.append(os.path.join(app_root_directory, "src"))
+print(f"App root directory: {app_root_directory}")
+sly.logger.info(f'PYTHONPATH={os.environ.get("PYTHONPATH", "")}')
+
+# order matters
+# from dotenv import load_dotenv
+# load_dotenv(os.path.join(app_root_directory, "secret_debug.env"))
+# load_dotenv(os.path.join(app_root_directory, "debug.env"))
 
 my_app = AppService()
 
@@ -22,8 +34,7 @@ def transform_label(class_names, img_size, label: sly.Label):
     y_center = round(center.row / img_size[0], 6)
     width = round(rect_geometry.width / img_size[1], 6)
     height = round(rect_geometry.height / img_size[0], 6)
-    result = '{} {} {} {} {}'.format(class_number, x_center, y_center, width, height)
-    return result
+    return f'{class_number} {x_center} {y_center} {width} {height}'
 
 
 @my_app.callback("transform")
@@ -34,7 +45,7 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
 
     RESULT_DIR = os.path.join(my_app.data_dir, result_dir_name)
     sly.fs.mkdir(RESULT_DIR)
-    ARCHIVE_NAME = result_dir_name + ".tar"
+    ARCHIVE_NAME = f"{result_dir_name}.tar"
     RESULT_ARCHIVE = os.path.join(my_app.data_dir, ARCHIVE_NAME)
     CONFIG_PATH = os.path.join(RESULT_DIR, 'data_config.yaml')
 
@@ -76,7 +87,7 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
 
     def _add_to_split(image_id, img_name, split_ids, split_image_paths, labels_dir, images_dir):
         split_ids.append(image_id)
-        ann_path = os.path.join(labels_dir, sly.fs.get_file_name(img_name) + '.txt')
+        ann_path = os.path.join(labels_dir, f'{sly.fs.get_file_name(img_name)}.txt')
         _write_new_ann(ann_path, yolov5_ann)
         img_path = os.path.join(images_dir, img_name)
         split_image_paths.append(img_path)
@@ -95,7 +106,7 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
 
         for batch in sly.batched(images):
             image_ids = [image_info.id for image_info in batch]
-            image_names = [image_info.name for image_info in batch]
+            image_names = [f"{dataset.name}_{image_info.name}" for image_info in batch]
             ann_infos = api.annotation.download_batch(dataset.id, image_ids)
 
 
@@ -115,14 +126,15 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
 
                 if ann.img_tags.get(VAL_TAG_NAME) is not None:
                     val_ids.append(image_id)
-                    ann_path = os.path.join(VAL_LABELS_DIR, sly.fs.get_file_name(img_name) + '.txt')
+                    ann_path = os.path.join(VAL_LABELS_DIR, f'{sly.fs.get_file_name(img_name)}.txt')
+
                     _write_new_ann(ann_path, yolov5_ann)
                     img_path = os.path.join(VAL_IMAGES_DIR, img_name)
                     val_image_paths.append(img_path)
                     image_processed = True
                     val_count += 1
 
-                if image_processed is False:
+                if not image_processed:
                     app_logger.warn("Image does not have train or val tags. It will be placed to training set.",
                                     extra={"image_id": image_id, "image_name": img_name, "dataset": dataset.name})
                     _add_to_split(image_id, img_name, train_ids, train_image_paths, TRAIN_LABELS_DIR, TRAIN_IMAGES_DIR)
