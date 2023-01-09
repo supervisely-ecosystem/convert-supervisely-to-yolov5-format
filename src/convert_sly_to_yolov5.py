@@ -161,7 +161,8 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
     sly.fs.archive_directory(RESULT_DIR, RESULT_ARCHIVE)
     app_logger.info("Result directory is archived")
 
-    remote_archive_path = "/yolov5_format/{}/{}".format(task_id, ARCHIVE_NAME)
+    remote_archive_path = os.path.join(
+        sly.team_files.RECOMMENDED_EXPORT_PATH, "yolov5_format/{}/{}".format(task_id, ARCHIVE_NAME))
 
     #@TODO: uncomment only for debug
     #api.file.remove(TEAM_ID, remote_archive_path)
