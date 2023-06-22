@@ -35,14 +35,14 @@ In addition, YOLO v5 format implies the presence of train/val datasets. Thus, to
 
 **Step 2**: Open context menu of project -> `Download as` -> `Convert Supervisely to YOLO v5 format` 
 
-<img src="https://i.imgur.com/bOUC5WH.png" width="600px"/>
+<img src="media/step1.png" width="600px"/>
 
 
 ## How to use
 
 App creates task in `workspace tasks` list. Once app is finished, you will see download link to resulting tar archive. 
 
-<img src="https://i.imgur.com/kXnmshv.png"/>
+<img src="media/use1.png"/>
 
 Resulting archive is saved in : 
 
@@ -52,11 +52,11 @@ For example our file path is the following:
 
 `/yolov5_format/1430/1047_lemons_annotated.tar`.
 
-<img src="https://i.imgur.com/hGrAyY0.png"/>
+<img src="media/use2.png"/>
 
 If some images were not tagged with `train` or `val` tags, special warning is printed. You will see all warnings in task logs.
 
-<img src="https://i.imgur.com/O5tshZQ.png"/>
+<img src="media/log.png"/>
 
 
 Here is the example of `data_config.yaml` that you will find in archive:
