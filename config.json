@@ -1,27 +1,27 @@
 {
-  "name": "Convert Supervisely to YOLO v5 format",
-  "type": "app",
-  "categories": [
-    "images",
-    "export"
-  ],
-  "description": "Transform project to YOLO v5 format and prepares tar archive for download",
-  "docker_image": "supervisely/base-py-sdk:6.72.55",
-  "instance_version": "6.5.1",
-  "main_script": "src/convert_sly_to_yolov5.py",
-  "modal_template": "src/modal.html",
-  "modal_template_state": {},
-  "gui_template": "src/gui.html",
-  "task_location": "workspace_tasks",
-  "isolate": true,
-  "headless": true,
-  "icon": "https://i.imgur.com/pz3eSzx.png",
-  "icon_background": "#FFFFFF",
-  "context_menu": {
-    "target": [
-      "images_project"
+    "name": "Convert Supervisely to YOLO v5 format",
+    "type": "app",
+    "categories": [
+        "images",
+        "export"
     ],
-    "context_root": "Download as"
-  },
-  "poster": "https://user-images.githubusercontent.com/106374579/183683758-89476d80-de3f-424f-9bfa-f1562703a168.png"
+    "description": "Transform project to YOLO v5 format and prepares tar archive for download",
+    "docker_image": "supervisely/import-export:0.0.2",
+    "instance_version": "6.5.1",
+    "main_script": "src/convert_sly_to_yolov5.py",
+    "modal_template": "src/modal.html",
+    "modal_template_state": {},
+    "gui_template": "src/gui.html",
+    "task_location": "workspace_tasks",
+    "isolate": true,
+    "headless": true,
+    "icon": "https://i.imgur.com/pz3eSzx.png",
+    "icon_background": "#FFFFFF",
+    "context_menu": {
+        "target": [
+            "images_project"
+        ],
+        "context_root": "Download as"
+    },
+    "poster": "https://user-images.githubusercontent.com/106374579/183683758-89476d80-de3f-424f-9bfa-f1562703a168.png"
 }
