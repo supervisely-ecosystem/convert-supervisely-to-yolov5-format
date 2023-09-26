@@ -5,11 +5,12 @@ import yaml
 import supervisely as sly
 from supervisely.app.v1.app_service import AppService
 
-app_root_directory = os.path.dirname(os.getcwd())
-sys.path.append(app_root_directory)
-sys.path.append(os.path.join(app_root_directory, "src"))
-print(f"App root directory: {app_root_directory}")
-sly.logger.info(f'PYTHONPATH={os.environ.get("PYTHONPATH", "")}')
+# debug mode
+# app_root_directory = os.path.dirname(os.getcwd())
+# sys.path.append(app_root_directory)
+# sys.path.append(os.path.join(app_root_directory, "src"))
+# print(f"App root directory: {app_root_directory}")
+# sly.logger.info(f'PYTHONPATH={os.environ.get("PYTHONPATH", "")}')
 
 # order matters
 # from dotenv import load_dotenv
@@ -64,13 +65,15 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
     class_names = [obj_class.name for obj_class in meta.obj_classes]
     class_colors = [obj_class.color for obj_class in meta.obj_classes]
 
+    
+    missing_tags = []
     if meta.get_tag_meta(TRAIN_TAG_NAME) is None:
-        app_logger.warn('Tag {!r} not found in project meta. Images without special tags will be marked as train'
-                        .format(TRAIN_TAG_NAME))
-
+        missing_tags.append(TRAIN_TAG_NAME)
     if meta.get_tag_meta(VAL_TAG_NAME) is None:
-        app_logger.warn('Tag {!r} not found in project meta. Images without special tags will be marked as train'
-                        .format(VAL_TAG_NAME))
+        missing_tags.append(VAL_TAG_NAME)
+    if len(missing_tags) > 0:
+        missing_tags_str = ', '.join([f'"{tag}"' for tag in missing_tags])
+        app_logger.warn(f'Tag(s): {missing_tags_str} not found in project meta. Images without special tags will be marked as train')
 
     error_classes = []
     for obj_class in meta.obj_classes:
@@ -135,8 +138,8 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
                     val_count += 1
 
                 if not image_processed:
-                    app_logger.warn("Image does not have train or val tags. It will be placed to training set.",
-                                    extra={"image_id": image_id, "image_name": img_name, "dataset": dataset.name})
+                    # app_logger.warn("Image does not have train or val tags. It will be placed to training set.",
+                    #                 extra={"image_id": image_id, "image_name": img_name, "dataset": dataset.name})
                     _add_to_split(image_id, img_name, train_ids, train_image_paths, TRAIN_LABELS_DIR, TRAIN_IMAGES_DIR)
                     train_count += 1
 
@@ -155,8 +158,8 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
     with open(CONFIG_PATH, 'w') as f:
         data = yaml.dump(data_yaml, f, default_flow_style=None)
 
-    app_logger.info("Number of images in train == {}".format(train_count))
-    app_logger.info("Number of images in val == {}".format(val_count))
+    app_logger.info("Number of images in train: {}".format(train_count))
+    app_logger.info("Number of images in val: {}".format(val_count))
 
     sly.fs.archive_directory(RESULT_DIR, RESULT_ARCHIVE)
     app_logger.info("Result directory is archived")
