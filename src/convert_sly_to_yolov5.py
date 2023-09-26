@@ -65,13 +65,15 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
     class_names = [obj_class.name for obj_class in meta.obj_classes]
     class_colors = [obj_class.color for obj_class in meta.obj_classes]
 
+    
+    missing_tags = []
     if meta.get_tag_meta(TRAIN_TAG_NAME) is None:
-        app_logger.warn('Tag {!r} not found in project meta. Images without special tags will be marked as train'
-                        .format(TRAIN_TAG_NAME))
-
+        missing_tags.append(TRAIN_TAG_NAME)
     if meta.get_tag_meta(VAL_TAG_NAME) is None:
-        app_logger.warn('Tag {!r} not found in project meta. Images without special tags will be marked as train'
-                        .format(VAL_TAG_NAME))
+        missing_tags.append(VAL_TAG_NAME)
+    if len(missing_tags) > 0:
+        missing_tags_str = ', '.join([f'"{tag}"' for tag in missing_tags])
+        app_logger.warn(f'Tag(s): {missing_tags_str} not found in project meta. Images without special tags will be marked as train')
 
     error_classes = []
     for obj_class in meta.obj_classes:
