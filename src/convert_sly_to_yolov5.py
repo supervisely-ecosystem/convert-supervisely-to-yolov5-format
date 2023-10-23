@@ -86,7 +86,7 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
     if len(error_classes) > 0:
         sly.logger.warn(
             f"Project has unsupported classes. "
-            f"Objects with unsupported geometry types will be {PROCCESS_SHAPES_MSG}"
+            f"Objects with unsupported geometry types will be {PROCCESS_SHAPES_MSG}: "
             f"{[obj_class.name for obj_class in error_classes]}"
         )
 
@@ -173,8 +173,8 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
         progress.iters_done_report(len(batch))
         if unsupported_shapes > 0:
             app_logger.warn(
-                f"Dataset {dataset.name} has {unsupported_shapes} objects with unsupported geometry types. "
-                f"These objects will be {PROCCESS_SHAPES_MSG}"
+                f"Dataset '{dataset.name}': "
+                f"{unsupported_shapes} objects with unsupported geometry types were {PROCCESS_SHAPES_MSG}"
             )
 
     data_yaml = {
