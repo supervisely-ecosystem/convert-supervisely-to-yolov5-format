@@ -1,2 +1,25 @@
 <div>
+  <sly-notification-2 class="mb10" :options="{'type': 'info'}">
+    <div>Only Rectangle (bbox) geometry is available to export by the current
+      application.
+  </sly-notification-2>
+  <sly-field
+    title="Process shapes"
+    description="Select how to process shapes that are not supported by the current application."
+  >
+    <div>
+      <el-radio-group v-model="state.processShapes" size="normal">
+        <div>
+          <el-radio label="transform">
+            <span>transform to Rectangle (bbox)</span></el-radio
+          >
+        </div>
+        <div>
+          <el-radio label="skip"
+            ><span>skip</span></el-radio
+          >
+        </div>
+      </el-radio-group>
+    </div>
+  </sly-field>
 </div>
