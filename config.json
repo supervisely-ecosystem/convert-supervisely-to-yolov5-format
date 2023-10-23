@@ -6,11 +6,13 @@
         "export"
     ],
     "description": "Transform project to YOLO v5 format and prepares tar archive for download",
-    "docker_image": "supervisely/import-export:6.72.137",
+    "docker_image": "supervisely/import-export:6.72.161",
     "instance_version": "6.5.1",
     "main_script": "src/convert_sly_to_yolov5.py",
     "modal_template": "src/modal.html",
-    "modal_template_state": {},
+    "modal_template_state": {
+        "processShapes": "skip"
+    },
     "gui_template": "src/gui.html",
     "task_location": "workspace_tasks",
     "isolate": true,
