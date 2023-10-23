@@ -1,7 +1,9 @@
 <div>
   <sly-notification-2 class="mb10" :options="{'type': 'info'}">
-    <div>Only Rectangle (bbox) geometry is available to export by the current
-      application.
+    <div>
+      Only Rectangle geometry type objects are available to be exported by the
+      current application.
+    </div>
   </sly-notification-2>
   <sly-field
     title="Process shapes"
@@ -15,9 +17,7 @@
           >
         </div>
         <div>
-          <el-radio label="skip"
-            ><span>skip</span></el-radio
-          >
+          <el-radio label="skip"><span>skip</span></el-radio>
         </div>
       </el-radio-group>
     </div>
