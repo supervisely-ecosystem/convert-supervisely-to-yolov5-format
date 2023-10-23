@@ -173,8 +173,8 @@ def transform(api: sly.Api, task_id, context, state, app_logger):
         progress.iters_done_report(len(batch))
         if unsupported_shapes > 0:
             app_logger.warn(
-                f"Dataset '{dataset.name}': "
-                f"{unsupported_shapes} objects with unsupported geometry types were {PROCCESS_SHAPES_MSG}"
+                f"DATASET '{dataset.name}': "
+                f"{unsupported_shapes} objects with unsupported geometry types have been {PROCCESS_SHAPES_MSG}"
             )
 
     data_yaml = {
