@@ -1,2 +1,2 @@
-supervisely==6.72.196
-#git+https://github.com/supervisely/supervisely.git@image-download-keyerror
+#supervisely==6.72.196
+git+https://github.com/supervisely/supervisely.git@logger-msg-to-str
