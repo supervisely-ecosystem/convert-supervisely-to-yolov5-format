@@ -31,6 +31,7 @@ VAL_TAG_NAME = "val"
 
 
 initial_info = {
+    "test_field": "test_value",
     "team_id": TEAM_ID,
     "workspace_id": WORKSPACE_ID,
     "project_id": PROJECT_ID,
