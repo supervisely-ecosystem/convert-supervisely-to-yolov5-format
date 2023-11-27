@@ -37,6 +37,8 @@ initial_info = {
     "project_id": PROJECT_ID,
 }
 sly.logger.info(initial_info)
+sly.logger.warn(initial_info)
+sly.logger.error(initial_info, exc_info=True)
 
 def transform_label(class_names, img_size, label: sly.Label):
     class_number = class_names.index(label.obj_class.name)
