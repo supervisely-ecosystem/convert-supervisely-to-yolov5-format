@@ -30,6 +30,13 @@ TRAIN_TAG_NAME = "train"
 VAL_TAG_NAME = "val"
 
 
+initial_info = {
+    "team_id": TEAM_ID,
+    "workspace_id": WORKSPACE_ID,
+    "project_id": PROJECT_ID,
+}
+sly.logger.info(initial_info)
+
 def transform_label(class_names, img_size, label: sly.Label):
     class_number = class_names.index(label.obj_class.name)
     rect_geometry = label.geometry.to_bbox()
