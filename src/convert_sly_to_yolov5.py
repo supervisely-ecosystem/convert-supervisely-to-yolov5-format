@@ -1,5 +1,4 @@
 import os
-import sys
 import yaml
 
 from dotenv import load_dotenv
@@ -7,12 +6,6 @@ from dotenv import load_dotenv
 import supervisely as sly
 from supervisely.app.v1.app_service import AppService
 
-# debug mode
-# app_root_directory = os.path.dirname(os.getcwd())
-# sys.path.append(app_root_directory)
-# sys.path.append(os.path.join(app_root_directory, "src"))
-# print(f"App root directory: {app_root_directory}")
-# sly.logger.info(f'PYTHONPATH={os.environ.get("PYTHONPATH", "")}')
 
 if sly.is_development():
     load_dotenv("local.env")
@@ -20,9 +13,9 @@ if sly.is_development():
 
 my_app = AppService()
 
-TEAM_ID = int(os.environ["context.teamId"])
-WORKSPACE_ID = int(os.environ["context.workspaceId"])
-PROJECT_ID = int(os.environ["modal.state.slyProjectId"])
+TEAM_ID = sly.env.team_id()
+WORKSPACE_ID = sly.env.workspace_id()
+PROJECT_ID = sly.env.project_id()
 PROCCESS_SHAPES = os.environ.get("modal.state.processShapes", "transform")
 PROCCESS_SHAPES_MSG = "skipped" if PROCCESS_SHAPES == "skip" else "transformed to rectangles"
 
@@ -247,4 +240,4 @@ if __name__ == "__main__":
     # @TODO: uncomment only for debug
     # sly.fs.clean_dir(my_app.data_dir)
 
-    sly.main_wrapper("main", main)
+    sly.main_wrapper("main", main, log_for_agent=False)
