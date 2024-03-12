@@ -1,12 +1,13 @@
 {
     "name": "Convert Supervisely to YOLO v5 format",
     "type": "app",
+    "version": "2.0.0",
     "categories": [
         "images",
         "export"
     ],
     "description": "Transform project to YOLO v5 format and prepares tar archive for download",
-    "docker_image": "supervisely/import-export:6.72.233",
+    "docker_image": "supervisely/import-export:6.73.48",
     "instance_version": "6.8.54",
     "main_script": "src/convert_sly_to_yolov5.py",
     "modal_template": "src/modal.html",
