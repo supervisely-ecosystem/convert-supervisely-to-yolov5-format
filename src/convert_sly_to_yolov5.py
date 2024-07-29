@@ -3,6 +3,7 @@ import yaml
 from typing import List, Tuple
 from dotenv import load_dotenv
 import supervisely as sly
+from workflow import Workflow
 
 # region constants
 TRAIN_TAG_NAME = "train"
@@ -201,10 +202,15 @@ def transform(api: sly.Api) -> None:
     sly.logger.info("Number of images in val: {}".format(val_count))
 
     # Archiving and uploading the directory to the TeamFiles.
-    sly.output.set_download(result_dir)
+    file_info = sly.output.set_download(result_dir)
     sly.logger.info("File uploaded, app stopped.")
+    # --------------------------------- Add Workflow Input And Output -------------------------------- #
+    workflow.add_input(project_id)
+    workflow.add_output(file_info)
+    # --------------------------------- Add Workflow Input And Output -------------------------------- #
 
 
 if __name__ == "__main__":
     api = sly.Api.from_env()
+    workflow = Workflow(api)
     transform(api)
