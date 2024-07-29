@@ -46,5 +46,18 @@ class Workflow:
 
     @check_compatibility
     def add_output(self, file_info: sly.api.file_api.FileInfo):
-        self.api.app.workflow.add_output_file(file_info)
-        sly.logger.debug(f"Workflow: Output file - {file_info.id if file_info else None}")
+        try:
+            meta = {
+                "customRelationSettings": {
+                    "icon": {
+                        "icon": "zmdi-archive",
+                        "color": "#33c94c",
+                        "backgroundColor": "#d9f7e4",
+                    },
+                    "mainLink": {"url": f"{file_info.full_storage_url}", "title": "Download"},
+                }
+            }
+            self.api.app.workflow.add_output_file(file_info, meta)
+            sly.logger.debug(f"Workflow: Output file - {file_info.id if file_info else None}")
+        except Exception as e:
+            sly.logger.debug(f"Workflow: Can not add output file. Error: {repr(e)}")
