@@ -54,7 +54,7 @@ class Workflow:
                         "color": "#33c94c",
                         "backgroundColor": "#d9f7e4",
                     },
-                    "title": f"{file_info.name}",
+                    "title": f"<h4>{file_info.name}</h4>",
                     "mainLink": {"url": f"{file_info.full_storage_url}", "title": "Download"},
                 }
             }
