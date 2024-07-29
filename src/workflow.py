@@ -56,7 +56,7 @@ class Workflow:
                     },
                     "title": f"<h4>{file_info.name}</h4>",
                     "mainLink": {
-                        "url": f"files/{file_info.id}/true",
+                        "url": f"/files/{file_info.id}/true/?teamId={file_info.team_id}",
                         "title": "Download",
                     },
                 }
