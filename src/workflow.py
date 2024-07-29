@@ -55,7 +55,10 @@ class Workflow:
                         "backgroundColor": "#d9f7e4",
                     },
                     "title": f"<h4>{file_info.name}</h4>",
-                    "mainLink": {"url": f"{file_info.full_storage_url}", "title": "Download"},
+                    "mainLink": {
+                        "url": f"<a href='{file_info.full_storage_url}' download='{file_info.name}'></a>",
+                        "title": "Download",
+                    },
                 }
             }
             self.api.app.workflow.add_output_file(file_info, meta=meta)
