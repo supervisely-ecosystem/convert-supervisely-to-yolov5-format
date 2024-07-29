@@ -58,7 +58,7 @@ class Workflow:
                     "mainLink": {"url": f"{file_info.full_storage_url}", "title": "Download"},
                 }
             }
-            self.api.app.workflow.add_output_file(file_info, meta)
+            self.api.app.workflow.add_output_file(file_info, meta=meta)
             sly.logger.debug(f"Workflow: Output file - {file_info.id if file_info else None}")
         except Exception as e:
             sly.logger.debug(f"Workflow: Can not add output file. Error: {repr(e)}")
