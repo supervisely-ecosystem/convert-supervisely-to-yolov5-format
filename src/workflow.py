@@ -56,7 +56,7 @@ class Workflow:
                     },
                     "title": f"<h4>{file_info.name}</h4>",
                     "mainLink": {
-                        "url": f"<a href='{file_info.full_storage_url}' download='{file_info.name}'></a>",
+                        "url": f"files/{file_info.id}/true",
                         "title": "Download",
                     },
                 }
