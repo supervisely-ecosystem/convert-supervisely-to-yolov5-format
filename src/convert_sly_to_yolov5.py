@@ -5,7 +5,29 @@ from dotenv import load_dotenv
 import supervisely as sly
 from workflow import Workflow
 import asyncio
-from tinytimer import Timer
+import time
+
+
+class Timer:
+    def __init__(self, message=None, items_cnt=None):
+        self.message = message
+        self.items_cnt = items_cnt
+        self.elapsed = 0
+
+    def __enter__(self):
+        self.start = time.perf_counter()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.end = time.perf_counter()
+        self.elapsed = self.end - self.start
+        msg = self.message or f"Block execution"
+        if self.items_cnt is not None:
+            log_msg = f"{msg} time: {self.elapsed:.3f} seconds per {self.items_cnt} items  ({self.elapsed/self.items_cnt:.3f} seconds per item)"
+        else:
+            log_msg = f"{msg} time: {self.elapsed:.3f} seconds"
+        sly.logger.info(log_msg)
+
 
 # region constants
 TRAIN_TAG_NAME = "train"
@@ -179,34 +201,23 @@ def transform(api: sly.Api) -> None:
                         train_images_dir,
                     )
                     train_count += 1
+            progress.iters_done_report(len(batch))
 
-        if api.server_address.startswith("https://"):
-            semaphore = asyncio.Semaphore(100)
-        else:
-            semaphore = None
+        ids_to_download = train_ids + val_ids
+        paths_to_download = train_image_paths + val_image_paths
+        progress = sly.Progress("Downloading images...")
+        for batch_ids, batch_paths in sly.batched(zip(ids_to_download, paths_to_download)):
+            with Timer("Images downloading", len(batch_ids)):
+                coro = api.image.download_paths_async(
+                    batch_ids, batch_paths, progress_cb=progress.iters_done_report
+                )
+                loop = sly.utils.get_or_create_event_loop()
+                if loop.is_running():
+                    future = asyncio.run_coroutine_threadsafe(coro, loop)
+                    future.result()
+                else:
+                    loop.run_until_complete(coro)
 
-        ids = train_ids + val_ids
-        paths = train_image_paths + val_image_paths
-
-        with Timer() as t:
-            coro = api.image.download_paths_async(ids, paths, semaphore)
-            loop = sly.utils.get_or_create_event_loop()
-            if loop.is_running():
-                future = asyncio.run_coroutine_threadsafe(coro, loop)
-                future.result()
-            else:
-                loop.run_until_complete(coro)
-        sly.logger.info(
-            f"Downloading time: {t.elapsed:.4f} seconds per {len(ids)} images  ({t.elapsed/len(ids):.4f} seconds per image)"
-        )
-        # with Timer() as t:
-        #     api.image.download_paths(dataset.id, train_ids, train_image_paths)
-        #     api.image.download_paths(dataset.id, val_ids, val_image_paths)
-        # sly.logger.info(
-        #     f"Downloading time: {t.elapsed:.4f} seconds per {len(train_ids + val_ids) } images  ({t.elapsed/len(train_ids + val_ids):.4f} seconds per image)"
-        # )
-
-        progress.iters_done_report(len(batch))
         if unsupported_shapes > 0:
             sly.logger.warn(
                 f"Dataset {dataset.name}: "
