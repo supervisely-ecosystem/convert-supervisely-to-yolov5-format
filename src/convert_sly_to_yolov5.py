@@ -206,7 +206,9 @@ def transform(api: sly.Api) -> None:
         ids_to_download = train_ids + val_ids
         paths_to_download = train_image_paths + val_image_paths
         progress = sly.Progress("Downloading images...")
-        for batch_ids, batch_paths in sly.batched(zip(ids_to_download, paths_to_download)):
+        for batch_ids, batch_paths in zip(
+            sly.batched(ids_to_download), sly.batched(paths_to_download)
+        ):
             with Timer("Images downloading", len(batch_ids)):
                 coro = api.image.download_paths_async(
                     batch_ids, batch_paths, progress_cb=progress.iters_done_report
