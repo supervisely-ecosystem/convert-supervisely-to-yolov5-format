@@ -9,12 +9,12 @@
     title="Process shapes"
     description="Select how to process shapes that are not supported by the current application."
   >
-    <div style="margin-top: 1em;">
+    <div style="margin-top: 5px;">
       <el-radio-group v-model="state.processShapes" size="normal">
-        <div style="margin-top: 1em;">
+        <div >
           <el-radio label="skip"><span>Skip objects of unsupported geometries</span></el-radio>
         </div>
-        <div>
+        <div style="margin-top: 5px;">
           <el-radio label="transform"><span>Transform shapes to Rectangle (bbox)</span></el-radio>
         </div>
       </el-radio-group>

@@ -9,9 +9,13 @@ import time
 
 
 class Timer:
-    def __init__(self, message=None, items_cnt=None):
+
+    def __init__(self, message=None, items_cnt=None, log_level=None):
         self.message = message
         self.items_cnt = items_cnt
+        self.log_level = "info"
+        if log_level is not None:
+            self.log_level = log_level
         self.elapsed = 0
 
     def __enter__(self):
@@ -26,7 +30,7 @@ class Timer:
             log_msg = f"{msg} time: {self.elapsed:.3f} seconds per {self.items_cnt} items  ({self.elapsed/self.items_cnt:.3f} seconds per item)"
         else:
             log_msg = f"{msg} time: {self.elapsed:.3f} seconds"
-        sly.logger.info(log_msg)
+        getattr(sly.logger, self.log_level)(log_msg)
 
 
 # region constants
@@ -209,7 +213,7 @@ def transform(api: sly.Api) -> None:
         for batch_ids, batch_paths in zip(
             sly.batched(ids_to_download), sly.batched(paths_to_download)
         ):
-            with Timer("Images downloading", len(batch_ids)):
+            with Timer("Images downloading", len(batch_ids), "debug"):
                 coro = api.image.download_paths_async(
                     batch_ids, batch_paths, progress_cb=progress.iters_done_report
                 )
