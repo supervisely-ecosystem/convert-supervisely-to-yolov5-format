@@ -209,7 +209,7 @@ def transform(api: sly.Api) -> None:
 
         ids_to_download = train_ids + val_ids
         paths_to_download = train_image_paths + val_image_paths
-        progress = sly.Progress("Downloading images...")
+        progress = sly.Progress("Downloading images...", total_cnt=len(ids_to_download))
         for batch_ids, batch_paths in zip(
             sly.batched(ids_to_download), sly.batched(paths_to_download)
         ):
