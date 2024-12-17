@@ -3,35 +3,8 @@ import yaml
 from typing import List, Tuple
 from dotenv import load_dotenv
 import supervisely as sly
-from workflow import Workflow
+from workflow import add_input, add_output
 import asyncio
-import time
-
-
-class Timer:
-
-    def __init__(self, message=None, items_cnt=None, log_level=None):
-        self.message = message
-        self.items_cnt = items_cnt
-        self.log_level = "info"
-        if log_level is not None:
-            self.log_level = log_level
-        self.elapsed = 0
-
-    def __enter__(self):
-        self.start = time.perf_counter()
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.end = time.perf_counter()
-        self.elapsed = self.end - self.start
-        msg = self.message or f"Block execution"
-        if self.items_cnt is not None:
-            log_msg = f"{msg} time: {self.elapsed:.3f} seconds per {self.items_cnt} items  ({self.elapsed/self.items_cnt:.3f} seconds per item)"
-        else:
-            log_msg = f"{msg} time: {self.elapsed:.3f} seconds"
-        getattr(sly.logger, self.log_level)(log_msg)
-
 
 # region constants
 TRAIN_TAG_NAME = "train"
@@ -114,7 +87,7 @@ def transform(api: sly.Api) -> None:
         missing_tags.append(VAL_TAG_NAME)
     if len(missing_tags) > 0:
         missing_tags_str = ", ".join([f'"{tag}"' for tag in missing_tags])
-        sly.logger.warn(
+        sly.logger.warning(
             f"Tag(s): {missing_tags_str} not found in project meta. Images without special tags will be marked as train"
         )
 
@@ -123,7 +96,7 @@ def transform(api: sly.Api) -> None:
         if obj_class.geometry_type != sly.Rectangle:
             error_classes.append(obj_class)
     if len(error_classes) > 0:
-        sly.logger.warn(
+        sly.logger.warning(
             f"Project has unsupported classes. "
             f"Objects with unsupported geometry types will be {process_shapes_message}: "
             f"{[obj_class.name for obj_class in error_classes]}"
@@ -143,7 +116,7 @@ def transform(api: sly.Api) -> None:
     train_count = 0
     val_count = 0
 
-    progress = sly.Progress("Transformation ...", api.project.get_images_count(project_id))
+    progress = sly.Progress("Processing project items...", api.project.get_images_count(project_id))
     for dataset in api.dataset.get_list(project_id, recursive=True):
         sly.logger.info(f"Working with dataset: {dataset.name}...")
         images = api.image.get_list(dataset.id)
@@ -155,6 +128,7 @@ def transform(api: sly.Api) -> None:
         val_ids = []
         val_image_paths = []
 
+        a_progress = sly.Progress("Transforming annotations...", total_cnt=len(images))
         for batch in sly.batched(images):
             image_ids = [image_info.id for image_info in batch]
             image_names = [f"{dataset.id}_{dataset.name}_{image_info.name}" for image_info in batch]
@@ -205,30 +179,28 @@ def transform(api: sly.Api) -> None:
                         train_images_dir,
                     )
                     train_count += 1
-            progress.iters_done_report(len(batch))
+            a_progress.iters_done_report(len(batch))
 
         ids_to_download = train_ids + val_ids
         paths_to_download = train_image_paths + val_image_paths
-        progress = sly.Progress("Downloading images...", total_cnt=len(ids_to_download))
-        for batch_ids, batch_paths in zip(
-            sly.batched(ids_to_download), sly.batched(paths_to_download)
-        ):
-            with Timer("Images downloading", len(batch_ids), "debug"):
-                coro = api.image.download_paths_async(
-                    batch_ids, batch_paths, progress_cb=progress.iters_done_report
-                )
-                loop = sly.utils.get_or_create_event_loop()
-                if loop.is_running():
-                    future = asyncio.run_coroutine_threadsafe(coro, loop)
-                    future.result()
-                else:
-                    loop.run_until_complete(coro)
+        i_rogress = sly.Progress("Downloading images...", total_cnt=len(ids_to_download))
+        coro = api.image.download_paths_async(
+            ids_to_download, paths_to_download, progress_cb=i_rogress.iters_done_report
+        )
+        loop = sly.utils.get_or_create_event_loop()
+        if loop.is_running():
+            future = asyncio.run_coroutine_threadsafe(coro, loop)
+            future.result()
+        else:
+            loop.run_until_complete(coro)
 
         if unsupported_shapes > 0:
-            sly.logger.warn(
+            sly.logger.warning(
                 f"Dataset {dataset.name}: "
                 f"{unsupported_shapes} objects with unsupported geometry types have been {process_shapes_message}"
             )
+
+        progress.iters_done_report(len(ids_to_download))
 
     data_yaml = {
         "train": "../{}/images/train".format(result_dir_name),
@@ -247,12 +219,15 @@ def transform(api: sly.Api) -> None:
     file_info = sly.output.set_download(result_dir)
     sly.logger.info("File uploaded, app stopped.")
     # --------------------------------- Add Workflow Input And Output -------------------------------- #
-    workflow.add_input(project_id)
-    workflow.add_output(file_info)
+    add_input(api, project_id)
+    add_output(api, file_info)
     # --------------------------------- Add Workflow Input And Output -------------------------------- #
 
 
 if __name__ == "__main__":
     api = sly.Api.from_env()
-    workflow = Workflow(api)
+    if api.server_address == "https://app.supervisely.com":
+        semaphore = api.get_default_semaphore()
+        if semaphore._value == 10:
+            api.set_semaphore_size(7)
     transform(api)
