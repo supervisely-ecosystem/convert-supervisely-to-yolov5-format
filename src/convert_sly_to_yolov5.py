@@ -194,13 +194,13 @@ def transform(api: sly.Api) -> None:
         else:
             loop.run_until_complete(coro)
 
+        progress.iters_done_report(len(ids_to_download))
+
         if unsupported_shapes > 0:
             sly.logger.warning(
                 f"Dataset {dataset.name}: "
                 f"{unsupported_shapes} objects with unsupported geometry types have been {process_shapes_message}"
             )
-
-        progress.iters_done_report(len(ids_to_download))
 
     data_yaml = {
         "train": "../{}/images/train".format(result_dir_name),
