@@ -21,10 +21,13 @@ if sly.is_development():
 team_id = sly.env.team_id()
 workspace_id = sly.env.workspace_id()
 project_id = sly.env.project_id()
+dataset_id = sly.env.dataset_id(raise_not_found=False)
 process_shapes = os.environ.get("modal.state.processShapes", "transform")
 process_shapes_message = "skipped" if process_shapes == "skip" else "transformed to rectangles"
 # endregion
-sly.logger.info(f"Team: {team_id}, Workspace: {workspace_id}, Project: {project_id}")
+sly.logger.info(
+    f"Team: {team_id}, Workspace: {workspace_id}, Project: {project_id}, Dataset: {dataset_id}"
+)
 sly.logger.info(f"Process shapes: {process_shapes}")
 
 
@@ -50,12 +53,32 @@ def transform_label(class_names: List[str], img_size: Tuple[int, int], label: sl
     return f"{class_number} {x_center} {y_center} {width} {height}"
 
 
+def get_datasets_to_export(api: sly.Api) -> List[sly.DatasetInfo]:
+    """Returns datasets to export: the whole project, or the selected dataset with its nested ones.
+
+    :param api: Supervisely API object
+    :type api: sly.Api
+    :return: list of datasets to export
+    :rtype: List[sly.DatasetInfo]
+    """
+    if dataset_id is None:
+        return api.dataset.get_list(project_id, recursive=True)
+    datasets = [api.dataset.get_info_by_id(dataset_id)]
+    datasets.extend(api.dataset.get_nested(project_id, dataset_id))
+    return datasets
+
+
 def transform(api: sly.Api) -> None:
     """Transforms Supervisely project to YOLOv5 format."""
     project = api.project.get_info_by_id(project_id)
 
+    datasets = get_datasets_to_export(api)
+    sly.logger.info(f"Datasets to export: {[dataset.name for dataset in datasets]}")
+
     # Preparing result directory.
     result_dir_name = "{}_{}".format(project.id, project.name)
+    if dataset_id is not None:
+        result_dir_name = "{}_{}_{}".format(result_dir_name, datasets[0].id, datasets[0].name)
     result_dir = os.path.join(DATA_DIR, result_dir_name)
     sly.fs.mkdir(result_dir)
     config_path = os.path.join(result_dir, "data_config.yaml")
@@ -116,8 +139,13 @@ def transform(api: sly.Api) -> None:
     train_count = 0
     val_count = 0
 
-    progress = sly.Progress("Processing project items...", api.project.get_images_count(project_id))
-    for dataset in api.dataset.get_list(project_id, recursive=True):
+    if dataset_id is None:
+        total_items = api.project.get_images_count(project_id)
+    else:
+        total_items = sum(dataset.items_count or 0 for dataset in datasets)
+
+    progress = sly.Progress("Processing project items...", total_items)
+    for dataset in datasets:
         sly.logger.info(f"Working with dataset: {dataset.name}...")
         images = api.image.get_list(dataset.id)
         sly.logger.debug(f"Dataset contains {len(images)} images.")
