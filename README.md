@@ -37,6 +37,8 @@ In addition, YOLO v5 format implies the presence of train/val datasets. Thus, to
 
 <img src="https://i.imgur.com/bOUC5WH.png" width="600px"/>
 
+**Step 3** (optional): To export a single dataset instead of the whole project, open the context menu of that dataset -> `Download as` -> `Convert Supervisely to YOLO v5 format`. Nested datasets of the selected dataset are exported too.
+
 
 ## How to use
 
