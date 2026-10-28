@@ -53,6 +53,22 @@ def transform_label(class_names: List[str], img_size: Tuple[int, int], label: sl
     return f"{class_number} {x_center} {y_center} {width} {height}"
 
 
+def make_unique_name(name: str, used_stems: set) -> str:
+    """Returns ``name`` with its stem made unique among ``used_stems`` (and records it).
+
+    YOLO pairs ``images/<split>/<stem>.<ext>`` with ``labels/<split>/<stem>.txt``, so two images
+    that differ only in extension (``a.jpg``, ``a.png``) must not share a stem.
+    """
+    stem, ext = os.path.splitext(name)
+    candidate = stem
+    i = 1
+    while candidate in used_stems:
+        candidate = f"{stem}_{i}"
+        i += 1
+    used_stems.add(candidate)
+    return candidate + ext
+
+
 def get_datasets_to_export(api: sly.Api) -> List[sly.DatasetInfo]:
     """Returns datasets to export: the whole project, or the selected dataset with its nested ones.
 
@@ -126,8 +142,8 @@ def transform(api: sly.Api) -> None:
         )
 
     def _write_new_ann(path, content):
-        with open(path, "a") as f1:
-            f1.write("\n".join(content))
+        with open(path, "w") as f1:
+            f1.write("".join(f"{line}\n" for line in content))
 
     def _add_to_split(image_id, img_name, split_ids, split_image_paths, labels_dir, images_dir):
         split_ids.append(image_id)
@@ -138,6 +154,7 @@ def transform(api: sly.Api) -> None:
 
     train_count = 0
     val_count = 0
+    used_stems = set()
 
     if dataset_id is None:
         total_items = api.project.get_images_count(project_id)
@@ -159,7 +176,10 @@ def transform(api: sly.Api) -> None:
         a_progress = sly.Progress("Transforming annotations...", total_cnt=len(images))
         for batch in sly.batched(images):
             image_ids = [image_info.id for image_info in batch]
-            image_names = [f"{dataset.id}_{dataset.name}_{image_info.name}" for image_info in batch]
+            image_names = [
+                make_unique_name(f"{dataset.id}_{dataset.name}_{image_info.name}", used_stems)
+                for image_info in batch
+            ]
             ann_infos = api.annotation.download_batch(dataset.id, image_ids)
 
             for image_id, img_name, ann_info in zip(image_ids, image_names, ann_infos):
