@@ -188,7 +188,9 @@ def transform(api: sly.Api) -> None:
 
                 yolov5_ann = []
                 for label in ann.labels:
-                    if label.obj_class.geometry_type != sly.Rectangle:
+                    # check the label's own shape: an AnyGeometry class can hold rectangles
+                    # (exact type: OrientedBBox subclasses Rectangle but is not a plain bbox)
+                    if type(label.geometry) is not sly.Rectangle:
                         unsupported_shapes += 1
                         if process_shapes == "skip":
                             continue
