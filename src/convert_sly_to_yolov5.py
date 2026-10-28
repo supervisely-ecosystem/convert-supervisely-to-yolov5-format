@@ -53,6 +53,32 @@ def transform_label(class_names: List[str], img_size: Tuple[int, int], label: sl
     return f"{class_number} {x_center} {y_center} {width} {height}"
 
 
+MAX_NAME_BYTES = 255  # file name limit of ext4 and most other file systems
+
+
+def _cut_utf8(text: str, max_bytes: int) -> str:
+    return text.encode("utf-8")[:max_bytes].decode("utf-8", "ignore")
+
+
+def make_unique_name(name: str, used_stems: set) -> str:
+    """Returns ``name`` with its stem made unique among ``used_stems`` (and records it).
+
+    YOLO pairs ``images/<split>/<stem>.<ext>`` with ``labels/<split>/<stem>.txt``, so two images
+    that differ only in extension (``a.jpg``, ``a.png``) must not share a stem. Long stems are cut
+    so that both file names fit in MAX_NAME_BYTES.
+    """
+    stem, ext = os.path.splitext(name)
+    stem_limit = MAX_NAME_BYTES - max(len(ext.encode("utf-8")), len(".txt"))
+    candidate = _cut_utf8(stem, stem_limit)
+    i = 1
+    while candidate in used_stems:
+        suffix = f"_{i}"
+        candidate = _cut_utf8(stem, stem_limit - len(suffix)) + suffix
+        i += 1
+    used_stems.add(candidate)
+    return candidate + ext
+
+
 def get_datasets_to_export(api: sly.Api) -> List[sly.DatasetInfo]:
     """Returns datasets to export: the whole project, or the selected dataset with its nested ones.
 
@@ -126,8 +152,8 @@ def transform(api: sly.Api) -> None:
         )
 
     def _write_new_ann(path, content):
-        with open(path, "a") as f1:
-            f1.write("\n".join(content))
+        with open(path, "w") as f1:
+            f1.write("".join(f"{line}\n" for line in content))
 
     def _add_to_split(image_id, img_name, split_ids, split_image_paths, labels_dir, images_dir):
         split_ids.append(image_id)
@@ -138,6 +164,7 @@ def transform(api: sly.Api) -> None:
 
     train_count = 0
     val_count = 0
+    used_stems = set()
 
     if dataset_id is None:
         total_items = api.project.get_images_count(project_id)
@@ -159,7 +186,10 @@ def transform(api: sly.Api) -> None:
         a_progress = sly.Progress("Transforming annotations...", total_cnt=len(images))
         for batch in sly.batched(images):
             image_ids = [image_info.id for image_info in batch]
-            image_names = [f"{dataset.id}_{dataset.name}_{image_info.name}" for image_info in batch]
+            image_names = [
+                make_unique_name(f"{dataset.id}_{dataset.name}_{image_info.name}", used_stems)
+                for image_info in batch
+            ]
             ann_infos = api.annotation.download_batch(dataset.id, image_ids)
 
             for image_id, img_name, ann_info in zip(image_ids, image_names, ann_infos):
@@ -168,7 +198,9 @@ def transform(api: sly.Api) -> None:
 
                 yolov5_ann = []
                 for label in ann.labels:
-                    if label.obj_class.geometry_type != sly.Rectangle:
+                    # check the label's own shape: an AnyGeometry class can hold rectangles
+                    # (exact type: OrientedBBox subclasses Rectangle but is not a plain bbox)
+                    if type(label.geometry) is not sly.Rectangle:
                         unsupported_shapes += 1
                         if process_shapes == "skip":
                             continue
